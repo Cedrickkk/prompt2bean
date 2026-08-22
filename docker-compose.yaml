@@ -4,7 +4,7 @@ services:
     ports:
       - "11434:11434"
     volumes:
-      - prompt2bean_ollama_models:/root/.ollama
+      - ollama_models:/root/.ollama
     healthcheck:
       test: ["CMD", "ollama", "list"]
       interval: 5s
@@ -31,4 +31,4 @@ services:
       - api
 
 volumes:
-  prompt2bean_ollama_models:
+  ollama_models:
