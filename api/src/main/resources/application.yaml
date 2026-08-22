@@ -6,6 +6,6 @@ spring:
     ollama:
       base-url: http://localhost:11434
       chat:
-        model: llama3.2:latest
+        model: qwen2.5-coder:7b
       init:
         pull-model-strategy: always
