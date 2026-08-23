@@ -8,10 +8,12 @@ import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.converter.BeanOutputConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
 import java.util.Map;
 
@@ -29,8 +31,8 @@ public class RecipeController {
         this.promptTemplate = new PromptTemplate(recipePrompt);
     }
 
-    @PostMapping("/ask")
-    public Recipe ask(@Valid @RequestBody PromptRequest request) {
+    @PostMapping(value = "/ask", produces = MediaType.TEXT_PLAIN_VALUE)
+    public Flux<String> ask(@Valid @RequestBody PromptRequest request) {
         var converter = new BeanOutputConverter<>(Recipe.class);
 
         String renderedPrompt = promptTemplate.render(Map.of(
@@ -40,8 +42,8 @@ public class RecipeController {
 
         return chatClient.prompt()
                 .user(renderedPrompt)
-                .call()
-                .entity(Recipe.class);
+                .stream()
+                .content();
     }
 
 }

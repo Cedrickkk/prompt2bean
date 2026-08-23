@@ -1,4 +1,4 @@
-import { askPrompt } from "@/api/prompt-api";
+import { streamPrompt } from "@/api/prompt-api";
 import type { ChatMessage, PromptMode } from "@/api/types";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -45,25 +45,24 @@ export const useChatStore = create<ChatState>()(
           messages: [...state.messages, userMessage, assistantMessage],
         }));
 
-        try {
-          const result = await askPrompt(mode, text);
+        const updateAssistant = (patch: Partial<ChatMessage>) =>
           set((state) => ({
             messages: state.messages.map((message) =>
               message.id === assistantMessageId
-                ? { ...message, content: result, pending: false }
+                ? { ...message, ...patch }
                 : message,
             ),
           }));
+
+        try {
+          const result = await streamPrompt(mode, text, (partialText) =>
+            updateAssistant({ content: partialText }),
+          );
+          updateAssistant({ content: result, pending: false });
         } catch (error) {
           const errorText =
             error instanceof Error ? error.message : "Something went wrong.";
-          set((state) => ({
-            messages: state.messages.map((message) =>
-              message.id === assistantMessageId
-                ? { ...message, pending: false, error: errorText }
-                : message,
-            ),
-          }));
+          updateAssistant({ pending: false, error: errorText });
         }
       },
     }),

@@ -18,7 +18,15 @@ export function ChatMessageBubble({ message }: { message: ChatMessage }) {
             {message.content as string}
           </p>
         ) : message.pending ? (
-          <p className="text-sm text-gray-500 dark:text-gray-400">Thinking…</p>
+          message.content ? (
+            <pre className="max-w-full overflow-x-auto whitespace-pre-wrap font-mono text-xs leading-relaxed text-gray-600 dark:text-gray-300">
+              {message.content as string}
+            </pre>
+          ) : (
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              Thinking…
+            </p>
+          )
         ) : message.error ? (
           <p className="text-sm text-red-600 dark:text-red-400">
             {message.error}
