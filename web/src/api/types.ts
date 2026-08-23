@@ -35,6 +35,19 @@ export interface Recipe {
   tags: string[];
 }
 
+export const FIELD_ORDER: Partial<Record<PromptMode, string[]>> = {
+  recipe: [
+    "title",
+    "description",
+    "servings",
+    "prepTimeMinutes",
+    "cookTimeMinutes",
+    "ingredients",
+    "steps",
+    "tags",
+  ],
+};
+
 export interface ChatMessage {
   id: string;
   role: "user" | "assistant";

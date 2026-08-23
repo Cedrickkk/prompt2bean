@@ -52,11 +52,24 @@ function ValueCell({ value }: { value: JsonValue }) {
   return <span>{String(value)}</span>;
 }
 
-export function JsonTable({ data }: { data: JsonRecord }) {
+export function JsonTable({
+  data,
+  order,
+}: {
+  data: JsonRecord;
+  order?: string[];
+}) {
+  const keys = order
+    ? [
+        ...order.filter((key) => key in data),
+        ...Object.keys(data).filter((key) => !order.includes(key)),
+      ]
+    : Object.keys(data);
+
   return (
     <table className="w-full border-collapse text-sm">
       <tbody>
-        {Object.entries(data).map(([key, value]) => (
+        {keys.map((key) => (
           <tr
             key={key}
             className="border-t border-gray-200 align-top first:border-t-0 dark:border-gray-700"
@@ -65,7 +78,7 @@ export function JsonTable({ data }: { data: JsonRecord }) {
               {humanizeKey(key)}
             </th>
             <td className="py-1.5">
-              <ValueCell value={value} />
+              <ValueCell value={data[key]} />
             </td>
           </tr>
         ))}

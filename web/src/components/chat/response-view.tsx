@@ -1,4 +1,4 @@
-import type { JsonRecord } from "@/api/types";
+import { FIELD_ORDER, type JsonRecord, type PromptMode } from "@/api/types";
 import { JsonTable } from "@/components/chat/json-table";
 import { JsonView } from "@/components/chat/json-view";
 import { useState } from "react";
@@ -6,7 +6,13 @@ import { useState } from "react";
 const VIEW_OPTIONS = ["table", "json"] as const;
 type ViewOption = (typeof VIEW_OPTIONS)[number];
 
-export function ResponseView({ data }: { data: JsonRecord }) {
+export function ResponseView({
+  data,
+  mode,
+}: {
+  data: JsonRecord;
+  mode: PromptMode;
+}) {
   const [view, setView] = useState<ViewOption>("table");
 
   return (
@@ -27,7 +33,11 @@ export function ResponseView({ data }: { data: JsonRecord }) {
           </button>
         ))}
       </div>
-      {view === "table" ? <JsonTable data={data} /> : <JsonView data={data} />}
+      {view === "table" ? (
+        <JsonTable data={data} order={FIELD_ORDER[mode]} />
+      ) : (
+        <JsonView data={data} />
+      )}
     </div>
   );
 }

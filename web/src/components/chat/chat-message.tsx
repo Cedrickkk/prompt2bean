@@ -52,7 +52,10 @@ export function ChatMessageBubble({ message }: { message: ChatMessage }) {
             {message.error}
           </p>
         ) : (
-          <ResponseView data={message.content as JsonRecord} />
+          <ResponseView
+            data={message.content as JsonRecord}
+            mode={message.mode}
+          />
         )}
       </div>
     </div>
