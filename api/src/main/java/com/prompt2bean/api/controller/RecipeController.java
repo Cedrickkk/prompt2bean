@@ -1,5 +1,6 @@
 package com.prompt2bean.api.controller;
 
+import com.prompt2bean.api.advisor.SimpleLoggerAdvisor;
 import com.prompt2bean.api.dto.request.PromptRequest;
 import com.prompt2bean.api.dto.response.Recipe;
 import jakarta.validation.Valid;
@@ -27,7 +28,9 @@ public class RecipeController {
     RecipeController(
             ChatClient.Builder builder,
             @Value("classpath:prompts/recipe-prompt.st") Resource recipePrompt) {
-        this.chatClient = builder.build();
+        this.chatClient = builder
+                .defaultAdvisors(new SimpleLoggerAdvisor())
+                .build();
         this.promptTemplate = new PromptTemplate(recipePrompt);
     }
 
