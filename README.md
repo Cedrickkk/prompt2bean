@@ -18,7 +18,7 @@ docker compose up --build
 
 This builds and starts three services:
 
-- `ollama` — model runtime, pulls `llama3.2:latest` on first start
+- `ollama` — model runtime, pulls `qwen2.5-coder:7b` on first start
 - `api` — Spring Boot backend, available at http://localhost:8080
 - `web` — frontend served by nginx at http://localhost:3000 (proxies `/api/` to the backend)
 
@@ -36,7 +36,7 @@ The first run can take a while while the Ollama model is downloaded. Once `ollam
 
 ```bash
 ollama serve
-ollama pull llama3.2:latest
+ollama pull qwen2.5-coder:7b
 ```
 
 By default the API expects Ollama at `http://localhost:11434` (see `api/src/main/resources/application.yaml`).
