@@ -60,9 +60,6 @@ export function ChatInput() {
           </svg>
         </button>
       </form>
-      <p className="mt-2 px-1 text-xs text-gray-400 dark:text-gray-500">
-        Press Enter to send, Shift+Enter for a new line.
-      </p>
     </div>
   );
 }
